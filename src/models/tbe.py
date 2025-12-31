@@ -6,8 +6,7 @@ from typing import Any, Optional
 from uuid import UUID, uuid4
 
 from pydantic import BaseModel, Field, ConfigDict, field_validator
-from sqlalchemy import Column, String, DateTime, Float, Integer, Text, ForeignKey, Boolean
-from sqlalchemy.dialects.sqlite import JSON
+from sqlalchemy import Column, String, DateTime, Float, Integer, Text, ForeignKey, Boolean, JSON
 from sqlalchemy.orm import relationship
 
 from src.config.database import Base

@@ -4,6 +4,7 @@ from functools import lru_cache
 from typing import Literal
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic import field_validator
 
 
 class Settings(BaseSettings):
@@ -21,9 +22,27 @@ class Settings(BaseSettings):
     debug: bool = False
     environment: Literal["development", "staging", "production"] = "development"
 
-    # Database settings
-    database_url: str = "sqlite+aiosqlite:///./procure_pro.db"
+    # Database settings - Railway PostgreSQL
+    database_url: str = "postgresql://postgres:XHKYkvrniDAQepUbKlTadhtiMqExKxBf@postgres.railway.internal:5432/railway"
     database_echo: bool = False
+
+    @field_validator("database_url", mode="after")
+    @classmethod
+    def convert_to_async_url(cls, v: str) -> str:
+        """Convert database URL to async format for SQLAlchemy."""
+        if v.startswith("postgresql://"):
+            return v.replace("postgresql://", "postgresql+asyncpg://", 1)
+        elif v.startswith("postgres://"):
+            return v.replace("postgres://", "postgresql+asyncpg://", 1)
+        return v
+
+    @property
+    def sync_database_url(self) -> str:
+        """Get synchronous database URL for migrations."""
+        url = self.database_url
+        if "+asyncpg" in url:
+            return url.replace("+asyncpg", "")
+        return url
 
     # API settings
     api_prefix: str = "/api/v1"

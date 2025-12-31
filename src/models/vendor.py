@@ -6,8 +6,7 @@ from typing import Optional
 from uuid import UUID, uuid4
 
 from pydantic import BaseModel, Field, ConfigDict
-from sqlalchemy import Column, String, DateTime, Enum as SQLEnum, Text, Float
-from sqlalchemy.dialects.sqlite import JSON
+from sqlalchemy import Column, String, DateTime, Enum as SQLEnum, Text, Float, JSON
 
 from src.config.database import Base
 

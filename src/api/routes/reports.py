@@ -4,11 +4,10 @@ from typing import Optional
 from uuid import UUID
 
 from fastapi import APIRouter, HTTPException, Query
-from fastapi.responses import JSONResponse
 
 from src.models.tbe import TBEReport
 from src.services.report_generator import TBEReportGenerator
-from src.api.routes.tbe import get_evaluations_dict
+from src.api.routes.tbe import get_evaluation_from_cache
 
 router = APIRouter()
 
@@ -33,11 +32,10 @@ async def generate_evaluation_report(
     - Recommendations
     - Visual charts (optional)
     """
-    evaluations = get_evaluations_dict()
-    evaluation = evaluations.get(evaluation_id)
+    evaluation = get_evaluation_from_cache(str(evaluation_id))
 
     if not evaluation:
-        raise HTTPException(status_code=404, detail="Evaluation not found")
+        raise HTTPException(status_code=404, detail="Evaluation not found or not executed yet")
 
     if not evaluation.results:
         raise HTTPException(status_code=400, detail="Evaluation has not been executed yet")
@@ -117,11 +115,10 @@ async def generate_evaluation_report(
 @router.get("/evaluations/{evaluation_id}/charts/scores")
 async def get_score_chart(evaluation_id: UUID) -> dict:
     """Get score comparison chart for an evaluation."""
-    evaluations = get_evaluations_dict()
-    evaluation = evaluations.get(evaluation_id)
+    evaluation = get_evaluation_from_cache(str(evaluation_id))
 
     if not evaluation:
-        raise HTTPException(status_code=404, detail="Evaluation not found")
+        raise HTTPException(status_code=404, detail="Evaluation not found or not executed yet")
 
     if not evaluation.results:
         raise HTTPException(status_code=400, detail="Evaluation has not been executed yet")
@@ -139,11 +136,10 @@ async def get_score_chart(evaluation_id: UUID) -> dict:
 @router.get("/evaluations/{evaluation_id}/charts/tco")
 async def get_tco_chart(evaluation_id: UUID) -> dict:
     """Get TCO comparison chart for an evaluation."""
-    evaluations = get_evaluations_dict()
-    evaluation = evaluations.get(evaluation_id)
+    evaluation = get_evaluation_from_cache(str(evaluation_id))
 
     if not evaluation:
-        raise HTTPException(status_code=404, detail="Evaluation not found")
+        raise HTTPException(status_code=404, detail="Evaluation not found or not executed yet")
 
     if not evaluation.results:
         raise HTTPException(status_code=400, detail="Evaluation has not been executed yet")
@@ -166,11 +162,10 @@ async def get_tco_chart(evaluation_id: UUID) -> dict:
 @router.get("/evaluations/{evaluation_id}/charts/radar")
 async def get_radar_chart(evaluation_id: UUID) -> dict:
     """Get radar chart for multi-criteria comparison."""
-    evaluations = get_evaluations_dict()
-    evaluation = evaluations.get(evaluation_id)
+    evaluation = get_evaluation_from_cache(str(evaluation_id))
 
     if not evaluation:
-        raise HTTPException(status_code=404, detail="Evaluation not found")
+        raise HTTPException(status_code=404, detail="Evaluation not found or not executed yet")
 
     if not evaluation.results:
         raise HTTPException(status_code=400, detail="Evaluation has not been executed yet")
@@ -188,11 +183,10 @@ async def get_radar_chart(evaluation_id: UUID) -> dict:
 @router.get("/evaluations/{evaluation_id}/charts/compliance")
 async def get_compliance_heatmap(evaluation_id: UUID) -> dict:
     """Get compliance heatmap for an evaluation."""
-    evaluations = get_evaluations_dict()
-    evaluation = evaluations.get(evaluation_id)
+    evaluation = get_evaluation_from_cache(str(evaluation_id))
 
     if not evaluation:
-        raise HTTPException(status_code=404, detail="Evaluation not found")
+        raise HTTPException(status_code=404, detail="Evaluation not found or not executed yet")
 
     if not evaluation.results:
         raise HTTPException(status_code=400, detail="Evaluation has not been executed yet")
@@ -223,11 +217,10 @@ async def export_report(
 
     Currently supports JSON format. PDF export coming soon.
     """
-    evaluations = get_evaluations_dict()
-    evaluation = evaluations.get(evaluation_id)
+    evaluation = get_evaluation_from_cache(str(evaluation_id))
 
     if not evaluation:
-        raise HTTPException(status_code=404, detail="Evaluation not found")
+        raise HTTPException(status_code=404, detail="Evaluation not found or not executed yet")
 
     if not evaluation.results:
         raise HTTPException(status_code=400, detail="Evaluation has not been executed yet")

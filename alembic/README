@@ -1,0 +1,55 @@
+Procure-Pro-ISO Database Migrations (Alembic)
+=============================================
+
+This directory contains database migration scripts managed by Alembic.
+
+Directory Structure:
+-------------------
+- env.py          : Migration environment configuration
+- script.py.mako  : Template for new migration files
+- versions/       : Migration scripts (auto-generated and manual)
+
+Common Commands:
+---------------
+# Create a new migration
+alembic revision --autogenerate -m "Description of changes"
+
+# Run all pending migrations
+alembic upgrade head
+
+# Downgrade one revision
+alembic downgrade -1
+
+# Show current revision
+alembic current
+
+# Show migration history
+alembic history
+
+# Show SQL for a migration (dry run)
+alembic upgrade head --sql
+
+Environment Variables:
+---------------------
+The migrations use these environment variables for database connection:
+
+Railway Format:
+- DATABASE_URL (full connection string)
+or individual components:
+- PGHOST
+- PGPORT
+- PGDATABASE
+- PGUSER
+- PGPASSWORD
+
+Alternative Format:
+- DB_HOST
+- DB_PORT
+- DB_NAME
+- DB_USER
+- DB_PASSWORD
+
+Note:
+-----
+The initial schema is created using database/schema.sql via the migration runner.
+Subsequent schema changes should be managed through Alembic migrations.

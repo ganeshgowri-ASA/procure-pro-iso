@@ -1,0 +1,11 @@
+Item,Description,Model,Vendor,Unit Price (USD),Quantity,Delivery (days),Country of Origin,Warranty
+1,Spectrophotometer UV-VIS,SP-2000,TechLab Solutions,15000.00,2,45,Germany,2 years
+2,HPLC System,HPLC-3500,ChemAnalytics Inc,85000.00,1,60,USA,3 years
+3,Digital Balance,DB-500,TechLab Solutions,2500.00,5,14,Japan,1 year
+4,pH Meter,PH-100,ChemAnalytics Inc,450.00,3,7,USA,1 year
+5,Centrifuge,CF-5000,BioEquip Ltd,12000.00,2,30,UK,2 years
+6,Autoclave,AC-200,BioEquip Ltd,8500.00,1,21,UK,2 years
+7,Spectrophotometer UV-VIS,SP-3000,ChemAnalytics Inc,16500.00,2,50,USA,3 years
+8,HPLC System,HPLC-4000,TechLab Solutions,92000.00,1,55,Germany,3 years
+9,Digital Balance,DB-600,BioEquip Ltd,2800.00,5,10,UK,1 year
+10,pH Meter,PH-200,TechLab Solutions,520.00,3,10,Germany,2 years

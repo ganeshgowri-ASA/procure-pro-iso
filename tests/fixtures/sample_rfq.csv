@@ -1,0 +1,11 @@
+Equipment Name,Vendor,Model Number,Unit Price,Quantity,Total Price,Delivery Time,Country of Origin,Technical Specs
+Spectrophotometer UV-VIS,TechLab Solutions,SP-2000,15000.00,2,30000.00,45 days,Germany,Wavelength: 190-1100nm; Bandwidth: 1nm
+HPLC System,ChemAnalytics Inc,HPLC-3500,85000.00,1,85000.00,60 days,USA,Pressure: 0-600 bar; Flow Rate: 0.001-10 mL/min
+Digital Balance,TechLab Solutions,DB-500,2500.00,5,12500.00,14 days,Japan,Capacity: 500g; Readability: 0.001g
+pH Meter,ChemAnalytics Inc,PH-100,450.00,3,1350.00,7 days,USA,Range: 0-14 pH; Accuracy: ±0.01 pH
+Centrifuge,BioEquip Ltd,CF-5000,12000.00,2,24000.00,30 days,UK,Speed: 500-15000 RPM; Capacity: 6x100mL
+Autoclave,BioEquip Ltd,AC-200,8500.00,1,8500.00,21 days,UK,Volume: 200L; Temperature: 121°C max
+Fume Hood,SafeLab Corp,FH-1800,6500.00,4,26000.00,45 days,USA,Width: 1800mm; Air Flow: 0.5 m/s
+Incubator,TechLab Solutions,IC-150,4200.00,2,8400.00,28 days,Germany,Temperature: 5-60°C; Volume: 150L
+Water Purification System,ChemAnalytics Inc,WP-1000,18500.00,1,18500.00,35 days,USA,Flow Rate: 1.0 L/min; Resistivity: 18.2 MΩ·cm
+Microscope,BioEquip Ltd,MS-400,7800.00,3,23400.00,21 days,Japan,Magnification: 40x-1000x; Camera: 5MP

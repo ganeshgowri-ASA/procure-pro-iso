@@ -120,7 +120,7 @@ class RFQService:
         if include_relations:
             query = query.options(
                 selectinload(RFQ.items),
-                selectinload(RFQ.vendor_invitations),
+                selectinload(RFQ.vendor_invitations).selectinload(RFQVendorInvitation.vendor),
                 selectinload(RFQ.quotations).selectinload(Quotation.items),
             )
 
@@ -142,7 +142,7 @@ class RFQService:
         """List RFQs with pagination and filtering."""
         query = select(RFQ).options(
             selectinload(RFQ.items),
-            selectinload(RFQ.vendor_invitations),
+            selectinload(RFQ.vendor_invitations).selectinload(RFQVendorInvitation.vendor),
             selectinload(RFQ.quotations),
         )
         count_query = select(func.count(RFQ.id))
@@ -445,18 +445,22 @@ class RFQService:
                 f"Cannot invite vendors to RFQ in '{rfq.status}' status"
             )
 
-        return await self._create_invitation(rfq_id, data.vendor_id, data.notes)
+        invitation = await self._create_invitation(rfq_id, data.vendor_id, data.notes)
+        # Return invitation with vendor loaded
+        return await self.get_invitation(invitation.id, include_vendor=True)
 
     async def get_invitation(
         self,
         invitation_id: int,
+        include_vendor: bool = True,
     ) -> Optional[RFQVendorInvitation]:
         """Get an invitation by ID."""
-        result = await self.db.execute(
-            select(RFQVendorInvitation).where(
-                RFQVendorInvitation.id == invitation_id
-            )
+        query = select(RFQVendorInvitation).where(
+            RFQVendorInvitation.id == invitation_id
         )
+        if include_vendor:
+            query = query.options(selectinload(RFQVendorInvitation.vendor))
+        result = await self.db.execute(query)
         return result.scalar_one_or_none()
 
     async def get_invitation_by_token(
@@ -500,8 +504,8 @@ class RFQService:
         invitation.sent_at = datetime.now(timezone.utc)
 
         await self.db.flush()
-        await self.db.refresh(invitation)
-        return invitation
+        # Return invitation with vendor loaded
+        return await self.get_invitation(invitation_id, include_vendor=True)
 
     async def accept_invitation(
         self,
@@ -516,8 +520,8 @@ class RFQService:
         invitation.responded_at = datetime.now(timezone.utc)
 
         await self.db.flush()
-        await self.db.refresh(invitation)
-        return invitation
+        # Return invitation with vendor loaded
+        return await self.get_invitation(invitation_id, include_vendor=True)
 
     async def decline_invitation(
         self,
@@ -534,8 +538,8 @@ class RFQService:
         invitation.decline_reason = reason
 
         await self.db.flush()
-        await self.db.refresh(invitation)
-        return invitation
+        # Return invitation with vendor loaded
+        return await self.get_invitation(invitation_id, include_vendor=True)
 
     async def remove_invitation(self, invitation_id: int) -> None:
         """Remove a vendor invitation."""
@@ -641,8 +645,8 @@ class RFQService:
         )
 
         await self.db.flush()
-        await self.db.refresh(quotation)
-        return quotation
+        # Return quotation with items loaded
+        return await self.get_quotation(quotation.id, include_items=True)
 
     async def get_quotation(
         self,
@@ -706,8 +710,8 @@ class RFQService:
         )
 
         await self.db.flush()
-        await self.db.refresh(quotation)
-        return quotation
+        # Return quotation with items loaded
+        return await self.get_quotation(quotation_id, include_items=True)
 
     async def submit_quotation(self, quotation_id: int) -> Quotation:
         """Submit a quotation for evaluation."""
@@ -728,8 +732,8 @@ class RFQService:
         quotation.submitted_at = datetime.now(timezone.utc)
 
         await self.db.flush()
-        await self.db.refresh(quotation)
-        return quotation
+        # Return quotation with items loaded
+        return await self.get_quotation(quotation_id, include_items=True)
 
     async def evaluate_quotation(
         self,
@@ -758,8 +762,8 @@ class RFQService:
         quotation.evaluated_at = datetime.now(timezone.utc)
 
         await self.db.flush()
-        await self.db.refresh(quotation)
-        return quotation
+        # Return quotation with items loaded
+        return await self.get_quotation(quotation_id, include_items=True)
 
     async def accept_quotation(self, quotation_id: int) -> Quotation:
         """Accept a quotation."""
@@ -788,8 +792,8 @@ class RFQService:
             other_quotation.status = QuotationStatus.REJECTED.value
 
         await self.db.flush()
-        await self.db.refresh(quotation)
-        return quotation
+        # Return quotation with items loaded
+        return await self.get_quotation(quotation_id, include_items=True)
 
     async def reject_quotation(self, quotation_id: int) -> Quotation:
         """Reject a quotation."""
@@ -805,8 +809,8 @@ class RFQService:
         quotation.status = QuotationStatus.REJECTED.value
 
         await self.db.flush()
-        await self.db.refresh(quotation)
-        return quotation
+        # Return quotation with items loaded
+        return await self.get_quotation(quotation_id, include_items=True)
 
     # ==================== Quotation Item Operations ====================
 

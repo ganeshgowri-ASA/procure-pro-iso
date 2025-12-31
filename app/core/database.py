@@ -14,11 +14,15 @@ class Base(DeclarativeBase):
     pass
 
 
-# Create async engine
+# Create async engine with PostgreSQL connection pool settings
 engine = create_async_engine(
-    settings.DATABASE_URL,
+    settings.async_database_url,
     echo=settings.DATABASE_ECHO,
     future=True,
+    pool_size=5,
+    max_overflow=10,
+    pool_pre_ping=True,
+    pool_recycle=300,
 )
 
 # Create async session factory

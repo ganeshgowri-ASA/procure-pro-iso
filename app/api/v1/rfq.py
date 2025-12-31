@@ -47,6 +47,8 @@ async def create_rfq(
     """Create a new RFQ."""
     service = RFQService(db)
     rfq = await service.create_rfq(data, created_by)
+    # Refresh to get the RFQ with all relationships loaded
+    rfq = await service.get_rfq(rfq.id, include_relations=True)
     return _build_rfq_response(rfq)
 
 
@@ -148,7 +150,9 @@ async def update_rfq(
 ) -> RFQResponse:
     """Update an RFQ."""
     service = RFQService(db)
-    rfq = await service.update_rfq(rfq_id, data)
+    await service.update_rfq(rfq_id, data)
+    # Refresh to get the RFQ with all relationships loaded
+    rfq = await service.get_rfq(rfq_id, include_relations=True)
     return _build_rfq_response(rfq)
 
 
@@ -189,6 +193,8 @@ async def update_rfq_status(
                 # Mark invitation as sent
                 await service.mark_invitation_sent(invitation.id)
 
+    # Refresh to get the RFQ with all relationships loaded
+    rfq = await service.get_rfq(rfq_id, include_relations=True)
     return _build_rfq_response(rfq)
 
 

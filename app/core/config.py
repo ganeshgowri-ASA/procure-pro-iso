@@ -21,9 +21,18 @@ class Settings(BaseSettings):
     DEBUG: bool = False
     API_V1_PREFIX: str = "/api/v1"
 
-    # Database
-    DATABASE_URL: str = "sqlite+aiosqlite:///./procure_pro.db"
+    # Database - PostgreSQL on Railway
+    DATABASE_URL: str = "postgresql+asyncpg://postgres:XHKYkvrniDAQepUbKlTadhtiMqExKxBf@postgres.railway.internal:5432/railway"
     DATABASE_ECHO: bool = False
+
+    @property
+    def async_database_url(self) -> str:
+        """Get async database URL with proper driver."""
+        url = self.DATABASE_URL
+        # Convert postgresql:// to postgresql+asyncpg://
+        if url.startswith("postgresql://"):
+            url = url.replace("postgresql://", "postgresql+asyncpg://", 1)
+        return url
 
     # Security
     SECRET_KEY: str = "change-this-secret-key-in-production"

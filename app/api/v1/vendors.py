@@ -47,6 +47,8 @@ async def create_vendor(
     """Create a new vendor."""
     service = VendorService(db)
     vendor = await service.create_vendor(data)
+    # Refresh to get the vendor with all relationships loaded
+    vendor = await service.get_vendor(vendor.id, include_relations=True)
     return VendorResponse.model_validate(vendor)
 
 
@@ -72,6 +74,8 @@ async def register_vendor(
         vendor_code=vendor.code,
     )
 
+    # Refresh to get the vendor with all relationships loaded
+    vendor = await service.get_vendor(vendor.id, include_relations=True)
     return VendorResponse.model_validate(vendor)
 
 
@@ -155,7 +159,9 @@ async def update_vendor(
 ) -> VendorResponse:
     """Update a vendor."""
     service = VendorService(db)
-    vendor = await service.update_vendor(vendor_id, data)
+    await service.update_vendor(vendor_id, data)
+    # Refresh to get the vendor with all relationships loaded
+    vendor = await service.get_vendor(vendor_id, include_relations=True)
     return VendorResponse.model_validate(vendor)
 
 
@@ -195,6 +201,8 @@ async def activate_vendor(
         vendor_code=vendor.code,
     )
 
+    # Refresh to get the vendor with all relationships loaded
+    vendor = await service.get_vendor(vendor_id, include_relations=True)
     return VendorResponse.model_validate(vendor)
 
 

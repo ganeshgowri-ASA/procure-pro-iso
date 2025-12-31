@@ -205,3 +205,34 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# ===========================================
+# Procure-Pro-ISO Specific
+# ===========================================
+
+# Uploaded files
+uploads/
+temp/
+
+# Local database files
+*.db
+*.sqlite
+
+# Log files
+logs/
+*.log
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Secrets (never commit these)
+.env.local
+.env.production
+secrets/

@@ -38,68 +38,81 @@ st.subheader("🏆 Vendor Scores")
 
 col1, col2, col3 = st.columns(3)
 
-for i, (col, vendor) in enumerate(zip([col1, col2, col3], scores_df.itertuples())):
-    with col:
-        # Determine card styling based on rank
-        if i == 0:
-            border_color = "#fbbf24"
-            badge = "🥇 Rank #1"
-        elif i == 1:
-            border_color = "#9ca3af"
-            badge = "🥈 Rank #2"
-        else:
-            border_color = "#cd7f32"
-            badge = "🥉 Rank #3"
+# Sort by Overall Score descending for ranking
+scores_sorted = scores_df.sort_values('Overall Score', ascending=False).reset_index(drop=True)
 
-        # Score color
-        if vendor._2 >= 90:  # Overall Score
-            score_color = "#22c55e"
-        elif vendor._2 >= 85:
-            score_color = "#3b82f6"
-        else:
-            score_color = "#f97316"
+for i, col in enumerate([col1, col2, col3]):
+    if i < len(scores_sorted):
+        row = scores_sorted.iloc[i]
+        vendor_name = row['Vendor']
+        overall_score = row['Overall Score']
+        tech_score = row['Technical Score']
+        quality_score = row['Quality Score']
+        delivery_score = row['Delivery Score']
+        compliance_score = row['Compliance Score']
+        recommendation = row['Recommendation']
 
-        # Recommendation badge
-        rec_color = {"Recommended": "#22c55e", "Acceptable": "#3b82f6", "Not Recommended": "#ef4444"}
+        with col:
+            # Determine card styling based on rank
+            if i == 0:
+                border_color = "#fbbf24"
+                badge = "🥇 Rank #1"
+            elif i == 1:
+                border_color = "#9ca3af"
+                badge = "🥈 Rank #2"
+            else:
+                border_color = "#cd7f32"
+                badge = "🥉 Rank #3"
 
-        st.markdown(f"""
-        <div style="background: white; padding: 1.5rem; border-radius: 10px;
-                    box-shadow: 0 2px 8px rgba(0,0,0,0.1); border-top: 4px solid {border_color};">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                <h4 style="margin: 0; color: #1f2937;">{vendor.Vendor}</h4>
-                <span style="font-size: 0.75rem; color: #666;">{badge}</span>
-            </div>
-            <div style="text-align: center; padding: 1.5rem; background: #f9fafb; border-radius: 8px; margin-bottom: 1rem;">
-                <h1 style="margin: 0; color: {score_color}; font-size: 3rem;">{vendor._2}</h1>
-                <p style="margin: 0; color: #666;">Overall Score</p>
-            </div>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
-                <div style="text-align: center; padding: 0.5rem; background: #f3f4f6; border-radius: 4px;">
-                    <p style="margin: 0; font-weight: bold;">{vendor._3}</p>
-                    <p style="margin: 0; font-size: 0.75rem; color: #666;">Technical</p>
+            # Score color
+            if overall_score >= 90:
+                score_color = "#22c55e"
+            elif overall_score >= 85:
+                score_color = "#3b82f6"
+            else:
+                score_color = "#f97316"
+
+            # Recommendation badge colors
+            rec_color = {"Recommended": "#22c55e", "Acceptable": "#3b82f6", "Not Recommended": "#ef4444"}
+
+            st.markdown(f"""
+            <div style="background: white; padding: 1.5rem; border-radius: 10px;
+                        box-shadow: 0 2px 8px rgba(0,0,0,0.1); border-top: 4px solid {border_color};">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h4 style="margin: 0; color: #1f2937;">{vendor_name}</h4>
+                    <span style="font-size: 0.75rem; color: #666;">{badge}</span>
                 </div>
-                <div style="text-align: center; padding: 0.5rem; background: #f3f4f6; border-radius: 4px;">
-                    <p style="margin: 0; font-weight: bold;">{vendor._4}</p>
-                    <p style="margin: 0; font-size: 0.75rem; color: #666;">Quality</p>
+                <div style="text-align: center; padding: 1.5rem; background: #f9fafb; border-radius: 8px; margin-bottom: 1rem;">
+                    <h1 style="margin: 0; color: {score_color}; font-size: 3rem;">{overall_score}</h1>
+                    <p style="margin: 0; color: #666;">Overall Score</p>
                 </div>
-                <div style="text-align: center; padding: 0.5rem; background: #f3f4f6; border-radius: 4px;">
-                    <p style="margin: 0; font-weight: bold;">{vendor._5}</p>
-                    <p style="margin: 0; font-size: 0.75rem; color: #666;">Delivery</p>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+                    <div style="text-align: center; padding: 0.5rem; background: #f3f4f6; border-radius: 4px;">
+                        <p style="margin: 0; font-weight: bold;">{tech_score}</p>
+                        <p style="margin: 0; font-size: 0.75rem; color: #666;">Technical</p>
+                    </div>
+                    <div style="text-align: center; padding: 0.5rem; background: #f3f4f6; border-radius: 4px;">
+                        <p style="margin: 0; font-weight: bold;">{quality_score}</p>
+                        <p style="margin: 0; font-size: 0.75rem; color: #666;">Quality</p>
+                    </div>
+                    <div style="text-align: center; padding: 0.5rem; background: #f3f4f6; border-radius: 4px;">
+                        <p style="margin: 0; font-weight: bold;">{delivery_score}</p>
+                        <p style="margin: 0; font-size: 0.75rem; color: #666;">Delivery</p>
+                    </div>
+                    <div style="text-align: center; padding: 0.5rem; background: #f3f4f6; border-radius: 4px;">
+                        <p style="margin: 0; font-weight: bold;">{compliance_score}</p>
+                        <p style="margin: 0; font-size: 0.75rem; color: #666;">Compliance</p>
+                    </div>
                 </div>
-                <div style="text-align: center; padding: 0.5rem; background: #f3f4f6; border-radius: 4px;">
-                    <p style="margin: 0; font-weight: bold;">{vendor._6}</p>
-                    <p style="margin: 0; font-size: 0.75rem; color: #666;">Compliance</p>
+                <div style="margin-top: 1rem; text-align: center;">
+                    <span style="background: {rec_color.get(recommendation, '#9ca3af')}20;
+                                color: {rec_color.get(recommendation, '#666')};
+                                padding: 0.25rem 0.75rem; border-radius: 999px; font-size: 0.875rem;">
+                        {recommendation}
+                    </span>
                 </div>
             </div>
-            <div style="margin-top: 1rem; text-align: center;">
-                <span style="background: {rec_color.get(vendor.Recommendation, '#9ca3af')}20;
-                            color: {rec_color.get(vendor.Recommendation, '#666')};
-                            padding: 0.25rem 0.75rem; border-radius: 999px; font-size: 0.875rem;">
-                    {vendor.Recommendation}
-                </span>
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
+            """, unsafe_allow_html=True)
 
 st.markdown("<br>", unsafe_allow_html=True)
 
@@ -116,17 +129,26 @@ with col1:
 
     colors = ['#8b5cf6', '#3b82f6', '#22c55e']
 
-    for i, vendor in enumerate(scores_df.itertuples()):
-        values = [vendor._3, vendor._4, vendor._5, vendor._6]
+    for i, (idx, row) in enumerate(scores_df.iterrows()):
+        values = [
+            row['Technical Score'],
+            row['Quality Score'],
+            row['Delivery Score'],
+            row['Compliance Score']
+        ]
         values.append(values[0])  # Close the polygon
+
+        # Parse color to rgba
+        hex_color = colors[i].lstrip('#')
+        r, g, b = tuple(int(hex_color[j:j+2], 16) for j in (0, 2, 4))
 
         fig.add_trace(go.Scatterpolar(
             r=values,
             theta=categories + [categories[0]],
             fill='toself',
-            name=vendor.Vendor.split()[0],
+            name=row['Vendor'].split()[0],
             line_color=colors[i],
-            fillcolor=f'rgba{tuple(list(int(colors[i].lstrip("#")[j:j+2], 16) for j in (0, 2, 4)) + [0.2])}'
+            fillcolor=f'rgba({r}, {g}, {b}, 0.2)'
         ))
 
     fig.update_layout(
@@ -154,26 +176,14 @@ st.subheader("📋 CTQ Comparison Matrix")
 
 st.markdown("*Critical to Quality parameters evaluation across all vendors*")
 
-# Style the CTQ dataframe
-def highlight_compliance(val):
-    if '✓' in str(val):
-        return 'background-color: #dcfce7; color: #166534;'
-    elif '✗' in str(val):
-        return 'background-color: #fee2e2; color: #991b1b;'
-    return ''
-
-styled_ctq = ctq_df.style.applymap(
-    highlight_compliance,
-    subset=['Precision Machinery', 'TechParts Intl', 'AutomaTech']
-)
-
+# Display CTQ dataframe (styled version removed to avoid deprecated applymap)
 st.dataframe(ctq_df, use_container_width=True, hide_index=True)
 
 # Legend
 st.markdown("""
 <div style="display: flex; gap: 2rem; margin-top: 1rem;">
-    <span>✓ = Compliant</span>
-    <span>✗ = Non-Compliant</span>
+    <span style="color: #166534;">✓ = Compliant</span>
+    <span style="color: #991b1b;">✗ = Non-Compliant</span>
 </div>
 """, unsafe_allow_html=True)
 

@@ -247,7 +247,7 @@ with tab1:
         # Create box and whisker plot
         fig = go.Figure()
 
-        # Add box plot
+        # Add box plot (without text/hovertemplate which can cause issues)
         fig.add_trace(go.Box(
             y=price_values,
             name='Price Distribution',
@@ -261,9 +261,26 @@ with tab1:
             ),
             line=dict(color='#5856d6', width=2),
             fillcolor='rgba(88, 86, 214, 0.3)',
-            text=[f"{VENDORS[v]['name']} ({classification[v]})" for v in vendor_cols],
-            hovertemplate='%{text}<br>Price: $%{y:,.0f}<extra></extra>'
+            hoverinfo='y'
         ))
+
+        # Add individual vendor points with proper labels
+        for i, vendor in enumerate(vendor_cols):
+            price = prices[vendor]
+            level = classification[vendor]
+            fig.add_trace(go.Scatter(
+                x=[0],
+                y=[price],
+                mode='markers',
+                marker=dict(
+                    color=L_COLORS[level]['color'],
+                    size=16,
+                    line=dict(width=2, color='white')
+                ),
+                name=f"{level}: {VENDORS[vendor]['name'][:15]}",
+                hovertemplate=f"{VENDORS[vendor]['name']}<br>{level}: ${price:,}<extra></extra>",
+                showlegend=False
+            ))
 
         # Add RIL Budget line
         fig.add_hline(

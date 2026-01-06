@@ -239,7 +239,7 @@ with tab1:
         # Create box plot
         fig = go.Figure()
 
-        # Box plot (without text/hovertemplate which can cause issues)
+        # Box plot
         fig.add_trace(go.Box(
             y=price_values,
             name='Price Distribution',
@@ -252,8 +252,7 @@ with tab1:
                 line=dict(width=2, color='white')
             ),
             line=dict(color='#5856d6', width=2),
-            fillcolor='rgba(88, 86, 214, 0.3)',
-            hoverinfo='y'
+            fillcolor='rgba(88, 86, 214, 0.3)'
         ))
 
         # Add individual vendor points with proper labels

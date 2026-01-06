@@ -247,7 +247,7 @@ with tab1:
         # Create box and whisker plot
         fig = go.Figure()
 
-        # Add box plot (without text/hovertemplate which can cause issues)
+        # Add box plot
         fig.add_trace(go.Box(
             y=price_values,
             name='Price Distribution',
@@ -260,8 +260,7 @@ with tab1:
                 line=dict(width=2, color='white')
             ),
             line=dict(color='#5856d6', width=2),
-            fillcolor='rgba(88, 86, 214, 0.3)',
-            hoverinfo='y'
+            fillcolor='rgba(88, 86, 214, 0.3)'
         ))
 
         # Add individual vendor points with proper labels

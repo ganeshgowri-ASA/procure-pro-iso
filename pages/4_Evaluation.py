@@ -239,28 +239,21 @@ with tab1:
         # Create box plot
         fig = go.Figure()
 
-        # Box plot
+        # Box plot (simple, no colored points)
         fig.add_trace(go.Box(
             y=price_values,
             name='Price Distribution',
-            boxpoints='all',
-            jitter=0.3,
-            pointpos=-1.8,
-            marker=dict(
-                color=[L_COLORS[classification[v]]['color'] for v in vendor_cols],
-                size=14,
-                line=dict(width=2, color='white')
-            ),
+            boxpoints=False,
             line=dict(color='#5856d6', width=2),
             fillcolor='rgba(88, 86, 214, 0.3)'
         ))
 
-        # Add individual vendor points with proper labels
-        for vendor in vendor_cols:
+        # Add individual vendor points as separate scatter traces with L1-L5 colors
+        for i, vendor in enumerate(vendor_cols):
             price = prices[vendor]
             level = classification[vendor]
             fig.add_trace(go.Scatter(
-                x=[0],
+                x=[0 + (i - 2) * 0.08],  # Spread points horizontally
                 y=[price],
                 mode='markers',
                 marker=dict(
